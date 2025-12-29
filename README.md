@@ -11,30 +11,46 @@ The project is divided into three main pillars:
 
 ## 🛠️ Environment Setup
 
-* [cite_start]**Hypervisor:** Oracle VirtualBox [cite: 22]
-* [cite_start]**Host OS:** Ubuntu 24.04.2 LTS [cite: 24]
-* [cite_start]**Client OS:** Kali Linux (for penetration testing and network verification) [cite: 88]
-* [cite_start]**Networking:** Configured using Host-Only Adapters to simulate an isolated internal network[cite: 84].
+* **Hypervisor:** Oracle VirtualBox.
+* **Host OS:** Ubuntu 24.04.2 LTS. 
+* **Client OS:** Kali Linux (for penetration testing and network verification)
+* **Networking:** Configured using Host-Only Adapters to simulate an isolated internal network.
 
 ## 🌐 Network Services Configuration
 
 The following services were installed and configured on the Ubuntu server:
 
-* [cite_start]**DHCP (ISC-DHCP-Server):** Configured to assign dynamic IP addresses within the `192.168.56.0/24` subnet and specific leases for clients[cite: 75, 76].
-* [cite_start]**DNS (BIND9):** Configured a local master zone (`mytest.local`) to resolve hostnames to IP addresses, tested using `dig` and `nslookup`[cite: 100, 101, 109].
-* [cite_start]**NTP:** Synchronized system time across the network using the Network Time Protocol[cite: 112].
+* **DHCP (ISC-DHCP-Server):** Configured to assign dynamic IP addresses within the `192.168.56.0/24` subnet and specific leases for clients.
+* **DNS (BIND9):** Configured a local master zone (`mytest.local`) to resolve hostnames to IP addresses, tested using `dig` and `nslookup`.
+* **NTP:** Synchronized system time across the network using the Network Time Protocol.
 
 ## 🔒 Security & Access Control
 
 ### SSH (Secure Shell)
-OpenSSH Server was configured to allow secure remote management. [cite_start]Connectivity was verified by accessing the Ubuntu server from the Kali client[cite: 154, 156].
+OpenSSH Server was configured to allow secure remote management. Connectivity was verified by accessing the Ubuntu server from the Kali client.
 
 ### iptables & ACLs
 Custom firewall rules were implemented to filter traffic and enforce security policies:
-* [cite_start]**Blocked Sites:** Rules to reject traffic to specific IPs associated with social media platforms (Facebook, Instagram, Twitter)[cite: 163].
-* [cite_start]**Port Filtering:** Blocked unencrypted HTTP traffic (Port 80) and allowed secure HTTPS traffic (Port 443)[cite: 164].
+* **Blocked Sites:** Rules to reject traffic to specific IPs associated with social media platforms (Facebook, Instagram, Twitter).
+* **Port Filtering:** Blocked unencrypted HTTP traffic (Port 80) and allowed secure HTTPS traffic (Port 443).
 
-```bash
-# Example Rules Implemented
-sudo iptables -A OUTPUT -p tcp --dport 80 -j REJECT
-sudo iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+##⚙️ Automation
+A custom Bash script (log_cleanup.sh) was created to automate system maintenance.
+
+Features:
+Creates log and backup directories.
+Deletes logs older than 7 days.
+Archives remaining logs into a .tar.gz file stamped with the current date.
+Scheduled via Cron Job to run automatically every Sunday at midnight (0 0 * * 0).
+
+##🕵️ Reverse Engineering & Debugging with GDB
+This module involved analyzing an unknown executable file to understand its internal logic.
+
+###Process:
+**Architecture Check:** Determined the binary was x86_64 using uname -m.
+**Execution:** The program accepts an input (Student IT Number) and generates a data.txt file containing encrypted content .
+**Debugging (GDB):**
+Analyzed functions using info functions to reveal a custom function: xor_encrypt_decrypt.
+Disassembled the code (Intel flavor) to trace memory and register values.
+Identified that the program uses a specific key to XOR encrypt an input string.
+Verification: Validated that the data.txt file contained the XOR-encrypted result of the discovered value.
