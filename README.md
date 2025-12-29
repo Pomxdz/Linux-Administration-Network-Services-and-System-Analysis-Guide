@@ -34,19 +34,19 @@ Custom firewall rules were implemented to filter traffic and enforce security po
 * **Blocked Sites:** Rules to reject traffic to specific IPs associated with social media platforms (Facebook, Instagram, Twitter).
 * **Port Filtering:** Blocked unencrypted HTTP traffic (Port 80) and allowed secure HTTPS traffic (Port 443).
 
-##⚙️ Automation
+## ⚙️ Automation
 A custom Bash script (log_cleanup.sh) was created to automate system maintenance.
 
-Features:
+### Features:
 Creates log and backup directories.
 Deletes logs older than 7 days.
 Archives remaining logs into a .tar.gz file stamped with the current date.
 Scheduled via Cron Job to run automatically every Sunday at midnight (0 0 * * 0).
 
-##🕵️ Reverse Engineering & Debugging with GDB
+## 🕵️ Reverse Engineering & Debugging with GDB
 This module involved analyzing an unknown executable file to understand its internal logic.
 
-###Process:
+### Process:
 **Architecture Check:** Determined the binary was x86_64 using uname -m.
 **Execution:** The program accepts an input (Student IT Number) and generates a data.txt file containing encrypted content .
 **Debugging (GDB):**
